@@ -1,0 +1,386 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Luvano - Marketplace de Moçambique</title>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --primary-red: #D32F2F;
+            --primary-green: #2E7D32;
+            --primary-yellow: #F9A825;
+            --primary-black: #1A1A1A;
+            --accent-gold: #FFB300;
+            --bg-light: #FAFAFA;
+            --bg-white: #FFFFFF;
+            --text-dark: #212121;
+            --text-medium: #616161;
+            --text-light: #9E9E9E;
+            --border-color: #E0E0E0;
+            --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.08);
+            --shadow-md: 0 4px 16px rgba(0, 0, 0, 0.12);
+            --shadow-lg: 0 8px 32px rgba(0, 0, 0, 0.16);
+            --font-display: 'Playfair Display', serif;
+            --font-body: 'DM Sans', sans-serif;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: var(--font-body); background: var(--bg-light); color: var(--text-dark); line-height: 1.6; }
+        .container { max-width: 1400px; margin: 0 auto; padding: 0 24px; }
+
+        /* Header */
+        .main-header {
+            background: var(--bg-white);
+            border-bottom: 3px solid var(--primary-red);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: var(--shadow-sm);
+            animation: slideDown 0.5s ease-out;
+        }
+        @keyframes slideDown { from { transform: translateY(-100%); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+        
+        .header-content { display: flex; align-items: center; justify-content: space-between; padding: 16px 0; gap: 32px; flex-wrap: wrap; }
+        .logo h1 {
+            font-family: var(--font-display); font-size: 42px; font-weight: 900;
+            background: linear-gradient(135deg, var(--primary-red), var(--primary-yellow));
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+            letter-spacing: -2px; margin: 0;
+        }
+        .logo .tagline { font-size: 11px; color: var(--text-medium); text-transform: uppercase; letter-spacing: 2px; font-weight: 600; }
+        
+        .search-bar { flex: 1; max-width: 600px; position: relative; }
+        .search-bar input { width: 100%; padding: 16px 60px 16px 20px; border: 2px solid var(--border-color); border-radius: 50px; font-size: 15px; transition: all 0.3s ease; }
+        .search-bar input:focus { outline: none; border-color: var(--primary-red); box-shadow: 0 0 0 4px rgba(211, 47, 47, 0.1); }
+        .search-btn { position: absolute; right: 8px; top: 50%; transform: translateY(-50%); background: linear-gradient(135deg, var(--primary-red), #E53935); color: white; border: none; padding: 12px; border-radius: 50%; cursor: pointer; width: 44px; height: 44px; display: flex; align-items: center; justify-content: center; transition: all 0.3s ease; }
+        .search-btn:hover { transform: translateY(-50%) scale(1.1); box-shadow: 0 4px 12px rgba(211, 47, 47, 0.4); }
+        
+        .header-actions { display: flex; align-items: center; gap: 12px; }
+        .currency-selector select { padding: 12px 16px; border: 2px solid var(--border-color); border-radius: 10px; font-weight: 600; background: white; cursor: pointer; }
+        
+        .btn-primary, .btn-secondary {
+            padding: 12px 28px; border: none; border-radius: 12px; font-weight: 700; font-size: 15px;
+            cursor: pointer; text-decoration: none; display: inline-block; transition: all 0.3s ease;
+        }
+        .btn-primary { background: linear-gradient(135deg, var(--primary-red), #E53935); color: white; box-shadow: 0 4px 12px rgba(211, 47, 47, 0.3); }
+        .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(211, 47, 47, 0.4); }
+        .btn-secondary { background: white; color: var(--text-dark); border: 2px solid var(--border-color); }
+        .btn-secondary:hover { border-color: var(--primary-red); color: var(--primary-red); }
+
+        /* Categories */
+        .categories-bar { background: linear-gradient(135deg, var(--primary-green), #388E3C); padding: 16px 0; box-shadow: var(--shadow-sm); }
+        .categories-scroll { display: flex; gap: 12px; overflow-x: auto; padding: 4px 0; }
+        .categories-scroll::-webkit-scrollbar { height: 6px; }
+        .categories-scroll::-webkit-scrollbar-thumb { background: rgba(255, 255, 255, 0.3); border-radius: 3px; }
+        .category-btn {
+            padding: 12px 24px; background: rgba(255, 255, 255, 0.15); color: white; border: 2px solid transparent;
+            border-radius: 25px; font-weight: 700; font-size: 14px; cursor: pointer; white-space: nowrap;
+            transition: all 0.3s ease; backdrop-filter: blur(10px);
+        }
+        .category-btn:hover { background: rgba(255, 255, 255, 0.25); transform: translateY(-2px); }
+        .category-btn.active { background: white; color: var(--primary-green); }
+        .cat-icon { margin-right: 8px; font-size: 18px; }
+
+        /* Hero */
+        .hero-section {
+            background: linear-gradient(135deg, var(--primary-red) 0%, var(--primary-yellow) 50%, var(--primary-green) 100%);
+            padding: 100px 40px; border-radius: 24px; margin: 32px 0; text-align: center;
+            position: relative; overflow: hidden; animation: fadeInUp 0.7s ease-out;
+        }
+        @keyframes fadeInUp { from { opacity: 0; transform: translateY(40px); } to { opacity: 1; transform: translateY(0); } }
+        
+        .hero-section::before {
+            content: ''; position: absolute; top: 0; left: 0; right: 0; bottom: 0;
+            background: radial-gradient(circle at 20% 50%, rgba(255, 255, 255, 0.15) 0%, transparent 50%),
+                        radial-gradient(circle at 80% 30%, rgba(255, 255, 255, 0.15) 0%, transparent 50%);
+            pointer-events: none;
+        }
+        .hero-content { position: relative; z-index: 1; }
+        .hero-content h2 { font-family: var(--font-display); font-size: 64px; font-weight: 900; color: white; margin-bottom: 20px; text-shadow: 3px 5px 15px rgba(0, 0, 0, 0.3); line-height: 1.1; }
+        .hero-content p { font-size: 22px; color: rgba(255, 255, 255, 0.95); margin-bottom: 40px; font-weight: 500; }
+        .btn-hero { padding: 18px 48px; background: linear-gradient(135deg, var(--primary-yellow), var(--accent-gold)); color: var(--primary-black); border: none; border-radius: 15px; font-weight: 800; font-size: 18px; cursor: pointer; box-shadow: 0 8px 24px rgba(249, 168, 37, 0.4); transition: all 0.3s ease; }
+        .btn-hero:hover { transform: translateY(-3px); box-shadow: 0 12px 32px rgba(249, 168, 37, 0.5); }
+        
+        .hero-stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 24px; margin-top: 60px; }
+        .stat-card { background: rgba(255, 255, 255, 0.2); backdrop-filter: blur(20px); padding: 32px; border-radius: 20px; border: 2px solid rgba(255, 255, 255, 0.3); transition: all 0.3s ease; }
+        .stat-card:hover { transform: translateY(-6px); background: rgba(255, 255, 255, 0.25); }
+        .stat-card h3 { font-family: var(--font-display); font-size: 48px; color: white; margin-bottom: 8px; font-weight: 900; }
+        .stat-card p { color: rgba(255, 255, 255, 0.9); font-size: 16px; margin: 0; font-weight: 600; }
+
+        /* Products */
+        .products-section { margin: 40px 0 80px; }
+        .section-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 32px; flex-wrap: wrap; gap: 16px; }
+        .section-header h2 { font-family: var(--font-display); font-size: 40px; color: var(--text-dark); }
+        .sort-options select { padding: 12px 20px; border: 2px solid var(--border-color); border-radius: 10px; font-weight: 600; cursor: pointer; }
+        
+        .products-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 28px; }
+        .product-card { background: white; border-radius: 20px; overflow: hidden; box-shadow: var(--shadow-sm); transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1); cursor: pointer; animation: fadeIn 0.6s ease-out backwards; }
+        @keyframes fadeIn { from { opacity: 0; transform: scale(0.95); } to { opacity: 1; transform: scale(1); } }
+        .product-card:hover { transform: translateY(-10px); box-shadow: var(--shadow-lg); }
+        
+        .product-image { position: relative; aspect-ratio: 4/3; overflow: hidden; background: var(--bg-light); }
+        .product-image img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.5s ease; }
+        .product-card:hover .product-image img { transform: scale(1.08); }
+        .product-badge { position: absolute; top: 16px; right: 16px; background: var(--primary-yellow); color: var(--primary-black); padding: 8px 16px; border-radius: 25px; font-size: 12px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.5px; }
+        
+        .product-info { padding: 24px; }
+        .product-category { font-size: 12px; color: var(--text-medium); text-transform: uppercase; letter-spacing: 1.5px; font-weight: 700; margin-bottom: 10px; }
+        .product-title { font-size: 20px; font-weight: 800; color: var(--text-dark); margin-bottom: 10px; line-height: 1.3; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+        .product-location { font-size: 14px; color: var(--text-medium); margin-bottom: 12px; }
+        .product-rating { display: flex; align-items: center; gap: 8px; margin-bottom: 12px; }
+        .stars { color: var(--primary-yellow); font-size: 16px; }
+        .rating-count { font-size: 13px; color: var(--text-medium); }
+        .product-price { font-family: var(--font-display); font-size: 32px; font-weight: 900; color: var(--primary-red); margin-bottom: 16px; }
+        .product-seller { display: flex; align-items: center; gap: 10px; padding-top: 16px; border-top: 2px solid var(--border-color); }
+        .seller-avatar { width: 36px; height: 36px; border-radius: 50%; background: var(--primary-green); color: white; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 16px; }
+        .seller-name { font-size: 15px; color: var(--text-dark); font-weight: 700; }
+
+        /* Footer */
+        .main-footer { background: var(--primary-black); color: white; padding: 60px 0 30px; margin-top: 80px; }
+        .footer-content { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 48px; margin-bottom: 40px; }
+        .footer-section h3 { font-family: var(--font-display); font-size: 32px; margin-bottom: 16px; }
+        .footer-section h4 { font-size: 18px; margin-bottom: 20px; font-weight: 800; text-transform: uppercase; letter-spacing: 1px; }
+        .footer-section p { color: rgba(255, 255, 255, 0.7); margin-bottom: 10px; }
+        .footer-section a { display: block; color: rgba(255, 255, 255, 0.7); text-decoration: none; margin-bottom: 10px; transition: color 0.2s ease; }
+        .footer-section a:hover { color: var(--primary-yellow); }
+        .footer-bottom { text-align: center; padding-top: 30px; border-top: 1px solid rgba(255, 255, 255, 0.1); }
+        .footer-bottom p { color: rgba(255, 255, 255, 0.5); font-size: 14px; }
+
+        @media (max-width: 768px) {
+            .header-content { flex-direction: column; }
+            .search-bar { max-width: 100%; }
+            .hero-content h2 { font-size: 40px; }
+            .products-grid { grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 20px; }
+            .logo h1 { font-size: 32px; }
+        }
+    </style>
+</head>
+<body>
+    <header class="main-header">
+        <div class="container">
+            <div class="header-content">
+                <div class="logo">
+                    <h1>Luvano</h1>
+                    <span class="tagline">Marketplace de Moçambique</span>
+                </div>
+                
+                <div class="search-bar">
+                    <input type="text" id="searchInput" placeholder="Procurar produtos..." onkeyup="searchProducts()">
+                    <button class="search-btn" onclick="searchProducts()">
+                        <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+                            <path d="M9 17A8 8 0 1 0 9 1a8 8 0 0 0 0 16zM19 19l-4.35-4.35" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                        </svg>
+                    </button>
+                </div>
+                
+                <div class="header-actions">
+                    <div class="currency-selector">
+                        <select id="currencySelect" onchange="changeCurrency()">
+                            <option value="MZN">MZN - Metical</option>
+                            <option value="USD">USD - Dólar</option>
+                            <option value="EUR">EUR - Euro</option>
+                            <option value="ZAR">ZAR - Rand</option>
+                            <option value="GBP">GBP - Libra</option>
+                        </select>
+                    </div>
+                    <a href="login.html" class="btn-secondary" id="loginBtn">Entrar</a>
+                    <a href="cadastro.html" class="btn-primary">Criar Conta</a>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <div class="categories-bar">
+        <div class="container">
+            <div class="categories-scroll">
+                <button class="category-btn active" onclick="filterByCategory('all')">Todos</button>
+                <button class="category-btn" onclick="filterByCategory('electronics')"><span class="cat-icon">📱</span> Electrónicos</button>
+                <button class="category-btn" onclick="filterByCategory('vehicles')"><span class="cat-icon">🚗</span> Veículos</button>
+                <button class="category-btn" onclick="filterByCategory('real-estate')"><span class="cat-icon">🏠</span> Imóveis</button>
+                <button class="category-btn" onclick="filterByCategory('fashion')"><span class="cat-icon">👗</span> Moda</button>
+                <button class="category-btn" onclick="filterByCategory('home')"><span class="cat-icon">🛋️</span> Casa & Jardim</button>
+                <button class="category-btn" onclick="filterByCategory('sports')"><span class="cat-icon">⚽</span> Desportos</button>
+                <button class="category-btn" onclick="filterByCategory('services')"><span class="cat-icon">🔧</span> Serviços</button>
+                <button class="category-btn" onclick="filterByCategory('agriculture')"><span class="cat-icon">🌾</span> Agricultura</button>
+                <button class="category-btn" onclick="filterByCategory('books')"><span class="cat-icon">📚</span> Livros</button>
+            </div>
+        </div>
+    </div>
+
+    <main class="container">
+        <section class="hero-section">
+            <div class="hero-content">
+                <h2>Compre e Venda com Confiança</h2>
+                <p>O maior marketplace de Moçambique. Milhares de produtos à sua escolha.</p>
+                <button class="btn-hero" onclick="window.location.href='cadastro.html'">Começar Agora</button>
+            </div>
+            <div class="hero-stats">
+                <div class="stat-card"><h3>10,000+</h3><p>Produtos</p></div>
+                <div class="stat-card"><h3>5,000+</h3><p>Vendedores</p></div>
+                <div class="stat-card"><h3>50,000+</h3><p>Transações</p></div>
+            </div>
+        </section>
+
+        <section class="products-section">
+            <div class="section-header">
+                <h2>Produtos em Destaque</h2>
+                <div class="sort-options">
+                    <select onchange="sortProducts(this.value)">
+                        <option value="recent">Mais Recentes</option>
+                        <option value="price-low">Preço: Menor</option>
+                        <option value="price-high">Preço: Maior</option>
+                        <option value="rating">Melhor Avaliação</option>
+                    </select>
+                </div>
+            </div>
+            <div id="productsGrid" class="products-grid"></div>
+        </section>
+    </main>
+
+    <footer class="main-footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3>Luvano</h3>
+                    <p>O marketplace de confiança de Moçambique</p>
+                </div>
+                <div class="footer-section">
+                    <h4>Links Rápidos</h4>
+                    <a href="#">Sobre Nós</a>
+                    <a href="#">Como Funciona</a>
+                    <a href="#">Termos de Uso</a>
+                </div>
+                <div class="footer-section">
+                    <h4>Contacto</h4>
+                    <p>Email: info@luvano.co.mz</p>
+                    <p>Tel: +258 84 000 0000</p>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2024 Luvano. Todos os direitos reservados.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        let allProducts = [];
+        let currentCurrency = 'MZN';
+        const EXCHANGE_RATES = { MZN: 1, USD: 0.0157, EUR: 0.0145, ZAR: 0.29, GBP: 0.0125 };
+        const CURRENCY_SYMBOLS = { MZN: 'MT', USD: '$', EUR: '€', ZAR: 'R', GBP: '£' };
+
+        document.addEventListener('DOMContentLoaded', () => {
+            checkAuth();
+            loadProducts();
+        });
+
+        function checkAuth() {
+            const user = localStorage.getItem('luvanoUser');
+            if (user) {
+                const userData = JSON.parse(user);
+                document.getElementById('loginBtn').textContent = userData.name.split(' ')[0];
+                document.getElementById('loginBtn').href = 'painel.html';
+            }
+        }
+
+        function loadProducts() {
+            const saved = localStorage.getItem('luvanoProducts');
+            if (saved) {
+                allProducts = JSON.parse(saved);
+            } else {
+                allProducts = [
+                    { id: '1', seller_name: 'João Silva', title: 'iPhone 13 Pro Max 256GB', description: 'iPhone em excelente estado', price: 45000, category: 'electronics', location: 'Maputo, Polana', whatsapp: '+258 84 123 4567', image: 'https://images.unsplash.com/photo-1632661674596-df8be070a5c5?w=800', views: 156, rating: 4.5, reviews: 12, created_at: new Date(2024, 1, 10).toISOString() },
+                    { id: '2', seller_name: 'Maria Costa', title: 'Toyota Corolla 2018', description: 'Carro em perfeito estado', price: 1250000, category: 'vehicles', location: 'Matola', whatsapp: '+258 85 234 5678', image: 'https://images.unsplash.com/photo-1549317661-bd32c8ce0db2?w=800', views: 234, rating: 5.0, reviews: 8, created_at: new Date(2024, 1, 12).toISOString() },
+                    { id: '3', seller_name: 'Pedro Moçambique', title: 'Apartamento T3 Centro', description: 'Apartamento moderno, 3 quartos', price: 8500000, category: 'real-estate', location: 'Maputo, Centro', whatsapp: '+258 86 345 6789', image: 'https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?w=800', views: 389, rating: 4.8, reviews: 5, created_at: new Date(2024, 1, 8).toISOString() },
+                    { id: '4', seller_name: 'Ana Lopes', title: 'Notebook Dell Inspiron 15', description: 'Intel i5, 8GB RAM, SSD 256GB', price: 32000, category: 'electronics', location: 'Beira', whatsapp: '+258 84 456 7890', image: 'https://images.unsplash.com/photo-1496181133206-80ce9b88a853?w=800', views: 98, rating: 4.3, reviews: 7, created_at: new Date(2024, 1, 14).toISOString() },
+                    { id: '5', seller_name: 'Carlos Nhantumbo', title: 'Conjunto de Sofás Modernos', description: 'Sofá 3 lugares + 2 poltronas', price: 18500, category: 'home', location: 'Nampula', whatsapp: '+258 85 567 8901', image: 'https://images.unsplash.com/photo-1555041469-a586c61ea9bc?w=800', views: 67, rating: 4.7, reviews: 3, created_at: new Date(2024, 1, 13).toISOString() },
+                    { id: '6', seller_name: 'Sofia Macie', title: 'Vestido de Festa Elegante', description: 'Vestido longo, tamanho M', price: 2500, category: 'fashion', location: 'Maputo', whatsapp: '+258 84 678 9012', image: 'https://images.unsplash.com/photo-1566174053879-31528523f8ae?w=800', views: 45, rating: 4.9, reviews: 11, created_at: new Date(2024, 1, 11).toISOString() }
+                ];
+                localStorage.setItem('luvanoProducts', JSON.stringify(allProducts));
+            }
+            displayProducts(allProducts);
+        }
+
+        function displayProducts(products) {
+            const grid = document.getElementById('productsGrid');
+            if (products.length === 0) {
+                grid.innerHTML = '<p style="text-align:center;color:var(--text-medium);padding:40px;grid-column:1/-1;">Nenhum produto encontrado.</p>';
+                return;
+            }
+            grid.innerHTML = products.map((p, i) => `
+                <div class="product-card" style="animation-delay:${i * 0.08}s">
+                    <div class="product-image">
+                        <img src="${p.image}" alt="${p.title}">
+                        ${p.views > 100 ? '<span class="product-badge">Popular</span>' : ''}
+                    </div>
+                    <div class="product-info">
+                        <div class="product-category">${getCategoryName(p.category)}</div>
+                        <h3 class="product-title">${p.title}</h3>
+                        <div class="product-location">📍 ${p.location}</div>
+                        ${p.rating ? `<div class="product-rating"><span class="stars">${generateStars(p.rating)}</span><span class="rating-count">(${p.reviews})</span></div>` : ''}
+                        <div class="product-price">${formatPrice(p.price)}</div>
+                        <div class="product-seller">
+                            <div class="seller-avatar">${p.seller_name.charAt(0)}</div>
+                            <span class="seller-name">${p.seller_name}</span>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function filterByCategory(category) {
+            document.querySelectorAll('.category-btn').forEach(btn => btn.classList.remove('active'));
+            event.target.classList.add('active');
+            let filtered = category === 'all' ? allProducts : allProducts.filter(p => p.category === category);
+            displayProducts(filtered);
+        }
+
+        function searchProducts() {
+            const query = document.getElementById('searchInput').value.toLowerCase();
+            const filtered = allProducts.filter(p => p.title.toLowerCase().includes(query) || p.description.toLowerCase().includes(query) || p.location.toLowerCase().includes(query));
+            displayProducts(filtered);
+        }
+
+        function sortProducts(sortBy) {
+            let sorted = [...allProducts];
+            switch(sortBy) {
+                case 'price-low': sorted.sort((a, b) => a.price - b.price); break;
+                case 'price-high': sorted.sort((a, b) => b.price - a.price); break;
+                case 'rating': sorted.sort((a, b) => (b.rating || 0) - (a.rating || 0)); break;
+                default: sorted.sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
+            }
+            displayProducts(sorted);
+        }
+
+        function changeCurrency() {
+            currentCurrency = document.getElementById('currencySelect').value;
+            displayProducts(allProducts);
+        }
+
+        function formatPrice(priceInMZN) {
+            const rate = EXCHANGE_RATES[currentCurrency];
+            const convertedPrice = priceInMZN * rate;
+            const symbol = CURRENCY_SYMBOLS[currentCurrency];
+            return `${symbol} ${convertedPrice.toLocaleString('pt-BR', {
+                minimumFractionDigits: currentCurrency === 'MZN' ? 0 : 2,
+                maximumFractionDigits: currentCurrency === 'MZN' ? 0 : 2
+            })}`;
+        }
+
+        function getCategoryName(category) {
+            const categories = { 'electronics': 'Electrónicos', 'vehicles': 'Veículos', 'real-estate': 'Imóveis', 'fashion': 'Moda', 'home': 'Casa & Jardim', 'sports': 'Desportos', 'services': 'Serviços', 'agriculture': 'Agricultura', 'books': 'Livros' };
+            return categories[category] || category;
+        }
+
+        function generateStars(rating) {
+            const fullStars = Math.floor(rating);
+            const hasHalfStar = rating % 1 >= 0.5;
+            let stars = '★'.repeat(fullStars);
+            if (hasHalfStar) stars += '½';
+            stars += '☆'.repeat(5 - Math.ceil(rating));
+            return stars;
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,323 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Painel - Luvano</title>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --primary-red:#D32F2F;--primary-green:#2E7D32;--primary-yellow:#F9A825;
+            --primary-black:#1A1A1A;--bg-light:#FAFAFA;--bg-white:#FFFFFF;
+            --text-dark:#212121;--text-medium:#616161;--text-light:#9E9E9E;
+            --border-color:#E0E0E0;--shadow-sm:0 2px 8px rgba(0,0,0,0.08);
+            --shadow-md:0 4px 16px rgba(0,0,0,0.12);--shadow-lg:0 8px 32px rgba(0,0,0,0.16);
+            --font-display:'Playfair Display',serif;--font-body:'DM Sans',sans-serif;
+        }
+        *{margin:0;padding:0;box-sizing:border-box;}
+        body{font-family:var(--font-body);background:var(--bg-light);color:var(--text-dark);line-height:1.6;}
+        .container{max-width:1400px;margin:0 auto;padding:0 24px;}
+        
+        .header{background:var(--bg-white);border-bottom:3px solid var(--primary-red);padding:16px 0;box-shadow:var(--shadow-sm);position:sticky;top:0;z-index:100;}
+        .header-content{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:20px;}
+        .logo h1{font-family:var(--font-display);font-size:36px;font-weight:900;background:linear-gradient(135deg,var(--primary-red),var(--primary-yellow));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;letter-spacing:-2px;}
+        .user-info{display:flex;align-items:center;gap:12px;}
+        .user-avatar{width:48px;height:48px;border-radius:50%;background:var(--primary-green);color:white;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:20px;}
+        .user-details h3{font-size:16px;color:var(--text-dark);}
+        .user-details p{font-size:13px;color:var(--text-medium);}
+        
+        .btn{padding:12px 24px;border:none;border-radius:10px;font-weight:700;cursor:pointer;text-decoration:none;display:inline-block;transition:all 0.3s ease;}
+        .btn-primary{background:linear-gradient(135deg,var(--primary-red),#E53935);color:white;box-shadow:0 4px 12px rgba(211,47,47,0.3);}
+        .btn-primary:hover{transform:translateY(-2px);box-shadow:0 6px 20px rgba(211,47,47,0.4);}
+        .btn-secondary{background:white;color:var(--text-dark);border:2px solid var(--border-color);}
+        .btn-secondary:hover{border-color:var(--primary-red);color:var(--primary-red);}
+        
+        .main{padding:40px 0;}
+        .page-title{font-family:var(--font-display);font-size:40px;margin-bottom:32px;color:var(--text-dark);}
+        
+        .dashboard-cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:24px;margin-bottom:40px;}
+        .dash-card{background:white;padding:32px;border-radius:16px;box-shadow:var(--shadow-md);text-align:center;transition:all 0.3s ease;cursor:pointer;border:2px solid transparent;}
+        .dash-card:hover{transform:translateY(-4px);box-shadow:var(--shadow-lg);border-color:var(--primary-red);}
+        .dash-icon{font-size:48px;margin-bottom:16px;}
+        .dash-card h3{font-family:var(--font-display);font-size:36px;color:var(--primary-red);margin-bottom:8px;}
+        .dash-card p{color:var(--text-medium);font-size:15px;font-weight:600;}
+        
+        .section{background:white;padding:40px;border-radius:16px;box-shadow:var(--shadow-md);margin-bottom:32px;}
+        .section h2{font-family:var(--font-display);font-size:32px;margin-bottom:24px;}
+        
+        .form-group{margin-bottom:24px;}
+        .form-group label{display:block;margin-bottom:8px;font-weight:700;color:var(--text-dark);font-size:14px;}
+        .form-group input,.form-group select,.form-group textarea{width:100%;padding:14px 16px;border:2px solid var(--border-color);border-radius:10px;font-size:15px;transition:all 0.3s ease;}
+        .form-group input:focus,.form-group select:focus,.form-group textarea:focus{outline:none;border-color:var(--primary-red);box-shadow:0 0 0 4px rgba(211,47,47,0.1);}
+        .form-row{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:24px;margin-bottom:24px;}
+        
+        .image-upload-area{border:3px dashed var(--border-color);border-radius:12px;padding:20px;transition:all 0.3s ease;}
+        .image-upload-area:hover{border-color:var(--primary-red);background:rgba(211,47,47,0.02);}
+        .upload-placeholder{text-align:center;padding:40px;cursor:pointer;color:var(--text-medium);}
+        .upload-placeholder svg{margin-bottom:16px;}
+        .image-preview{display:grid;grid-template-columns:repeat(auto-fill,minmax(120px,1fr));gap:16px;margin-top:20px;}
+        .preview-item{position:relative;aspect-ratio:1;border-radius:8px;overflow:hidden;box-shadow:var(--shadow-sm);}
+        .preview-item img{width:100%;height:100%;object-fit:cover;}
+        .remove-image{position:absolute;top:8px;right:8px;background:rgba(0,0,0,0.7);color:white;border:none;width:28px;height:28px;border-radius:50%;cursor:pointer;font-size:18px;display:flex;align-items:center;justify-content:center;transition:all 0.2s ease;}
+        .remove-image:hover{background:var(--primary-red);transform:scale(1.1);}
+        
+        .form-actions{display:flex;gap:16px;justify-content:flex-end;margin-top:32px;}
+        
+        .toast{position:fixed;bottom:30px;right:30px;background:var(--primary-black);color:white;padding:18px 28px;border-radius:12px;box-shadow:var(--shadow-lg);animation:slideInRight 0.3s ease;z-index:10000;font-weight:600;}
+        @keyframes slideInRight{from{transform:translateX(100%);opacity:0;}to{transform:translateX(0);opacity:1;}}
+        .toast.success{background:var(--primary-green);}
+        .toast.error{background:var(--primary-red);}
+        
+        @media (max-width:768px){
+            .header-content{flex-direction:column;align-items:flex-start;}
+            .dash board-cards{grid-template-columns:1fr;}
+            .form-row{grid-template-columns:1fr;}
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="container">
+            <div class="header-content">
+                <div class="logo"><h1>Luvano</h1></div>
+                <div class="user-info">
+                    <div class="user-avatar" id="userAvatar"></div>
+                    <div class="user-details">
+                        <h3 id="userName"></h3>
+                        <p id="userEmail"></p>
+                    </div>
+                </div>
+                <div style="display:flex;gap:12px;">
+                    <a href="index.html" class="btn btn-secondary">Ver Produtos</a>
+                    <a href="logout.html" class="btn btn-primary">Sair</a>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <main class="container main">
+        <h1 class="page-title">Meu Painel</h1>
+
+        <div class="dashboard-cards">
+            <div class="dash-card" onclick="showSection('addProduct')">
+                <div class="dash-icon">➕</div>
+                <h3>Novo</h3>
+                <p>Criar Anúncio</p>
+            </div>
+            <div class="dash-card" id="totalProductsCard">
+                <div class="dash-icon">📦</div>
+                <h3 id="totalProducts">0</h3>
+                <p>Meus Anúncios</p>
+            </div>
+            <div class="dash-card">
+                <div class="dash-icon">👁️</div>
+                <h3 id="totalViews">0</h3>
+                <p>Visualizações</p>
+            </div>
+            <div class="dash-card">
+                <div class="dash-icon">⭐</div>
+                <h3 id="avgRating">0.0</h3>
+                <p>Avaliação</p>
+            </div>
+        </div>
+
+        <div id="addProductSection" class="section" style="display:none;">
+            <h2>Criar Novo Anúncio</h2>
+            <form id="productForm" onsubmit="handleAddProduct(event)">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Título do Produto</label>
+                        <input type="text" id="productTitle" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Categoria</label>
+                        <select id="productCategory" required>
+                            <option value="">Selecione...</option>
+                            <option value="electronics">Electrónicos</option>
+                            <option value="vehicles">Veículos</option>
+                            <option value="real-estate">Imóveis</option>
+                            <option value="fashion">Moda</option>
+                            <option value="home">Casa & Jardim</option>
+                            <option value="sports">Desportos</option>
+                            <option value="services">Serviços</option>
+                            <option value="agriculture">Agricultura</option>
+                            <option value="books">Livros</option>
+                        </select>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label>Descrição</label>
+                    <textarea id="productDescription" rows="4" required></textarea>
+                </div>
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Preço (MZN)</label>
+                        <input type="number" id="productPrice" step="0.01" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Localização</label>
+                        <input type="text" id="productLocation" placeholder="Ex: Maputo, Matola" required>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label>Fotos do Produto (até 5 imagens)</label>
+                    <div class="image-upload-area">
+                        <input type="file" id="productImages" accept="image/*" multiple onchange="handleImageUpload(event)" style="display:none;">
+                        <div class="upload-placeholder" onclick="document.getElementById('productImages').click()">
+                            <svg width="48" height="48" viewBox="0 0 48 48" fill="none">
+                                <path d="M24 16v16M16 24h16" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                                <rect x="4" y="4" width="40" height="40" rx="4" stroke="currentColor" stroke-width="2"/>
+                            </svg>
+                            <p>Clique para adicionar fotos</p>
+                        </div>
+                        <div id="imagePreview" class="image-preview"></div>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label>WhatsApp para Contacto</label>
+                    <input type="tel" id="productWhatsapp" placeholder="+258 84 123 4567" required>
+                </div>
+                
+                <div class="form-actions">
+                    <button type="button" class="btn btn-secondary" onclick="hideSection('addProduct')">Cancelar</button>
+                    <button type="submit" class="btn btn-primary">Publicar Anúncio</button>
+                </div>
+            </form>
+        </div>
+    </main>
+
+    <script>
+        let currentUser = null;
+        let uploadedImages = [];
+
+        // Verificar autenticação
+        document.addEventListener('DOMContentLoaded', () => {
+            const user = localStorage.getItem('luvanoUser');
+            if (!user) {
+                window.location.href = 'login.html';
+                return;
+            }
+            currentUser = JSON.parse(user);
+            
+            // Atualizar UI
+            document.getElementById('userName').textContent = currentUser.name;
+            document.getElementById('userEmail').textContent = currentUser.email;
+            document.getElementById('userAvatar').textContent = currentUser.name.charAt(0);
+            
+            loadDashboard();
+        });
+
+        function loadDashboard() {
+            const products = JSON.parse(localStorage.getItem('luvanoProducts') || '[]');
+            const userProducts = products.filter(p => p.user_id === currentUser.id);
+            
+            document.getElementById('totalProducts').textContent = userProducts.length;
+            
+            const totalViews = userProducts.reduce((sum, p) => sum + (p.views || 0), 0);
+            document.getElementById('totalViews').textContent = totalViews;
+            
+            const avgRating = userProducts.length > 0 ? 
+                (userProducts.reduce((sum, p) => sum + (p.rating || 0), 0) / userProducts.length).toFixed(1) : '0.0';
+            document.getElementById('avgRating').textContent = avgRating;
+        }
+
+        function showSection(section) {
+            document.getElementById(section + 'Section').style.display = 'block';
+            window.scrollTo({top: 400, behavior: 'smooth'});
+        }
+
+        function hideSection(section) {
+            document.getElementById(section + 'Section').style.display = 'none';
+            document.getElementById('productForm').reset();
+            uploadedImages = [];
+            document.getElementById('imagePreview').innerHTML = '';
+        }
+
+        function handleImageUpload(event) {
+            const files = Array.from(event.target.files);
+            
+            if (uploadedImages.length + files.length > 5) {
+                showToast('Máximo de 5 imagens permitidas', 'error');
+                return;
+            }
+            
+            files.forEach(file => {
+                if (file.type.startsWith('image/')) {
+                    const reader = new FileReader();
+                    reader.onload = (e) => {
+                        uploadedImages.push(e.target.result);
+                        displayImagePreviews();
+                    };
+                    reader.readAsDataURL(file);
+                }
+            });
+        }
+
+        function displayImagePreviews() {
+            const preview = document.getElementById('imagePreview');
+            preview.innerHTML = uploadedImages.map((img, index) => `
+                <div class="preview-item">
+                    <img src="${img}" alt="Preview ${index + 1}">
+                    <button type="button" class="remove-image" onclick="removeImage(${index})">×</button>
+                </div>
+            `).join('');
+        }
+
+        function removeImage(index) {
+            uploadedImages.splice(index, 1);
+            displayImagePreviews();
+        }
+
+        function handleAddProduct(event) {
+            event.preventDefault();
+            
+            if (uploadedImages.length === 0) {
+                showToast('Adicione pelo menos uma foto', 'error');
+                return;
+            }
+            
+            const product = {
+                id: Date.now().toString(36) + Math.random().toString(36).substr(2),
+                user_id: currentUser.id,
+                seller_name: currentUser.name,
+                title: document.getElementById('productTitle').value,
+                description: document.getElementById('productDescription').value,
+                price: parseFloat(document.getElementById('productPrice').value),
+                category: document.getElementById('productCategory').value,
+                location: document.getElementById('productLocation').value,
+                whatsapp: document.getElementById('productWhatsapp').value,
+                image: uploadedImages[0],
+                images: uploadedImages,
+                views: 0,
+                rating: 0,
+                reviews: 0,
+                created_at: new Date().toISOString()
+            };
+            
+            const products = JSON.parse(localStorage.getItem('luvanoProducts') || '[]');
+            products.unshift(product);
+            localStorage.setItem('luvanoProducts', JSON.stringify(products));
+            
+            showToast('Anúncio criado com sucesso!', 'success');
+            hideSection('addProduct');
+            loadDashboard();
+        }
+
+        function showToast(message, type = 'success') {
+            const toast = document.createElement('div');
+            toast.className = `toast ${type}`;
+            toast.textContent = message;
+            document.body.appendChild(toast);
+            setTimeout(() => {
+                toast.style.animation = 'slideInRight 0.3s ease reverse';
+                setTimeout(() => toast.remove(), 300);
+            }, 3000);
+        }
+    </script>
+</body>
+</html>
