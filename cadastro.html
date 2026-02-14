@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Criar Conta - Luvano</title>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght:700;900&family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --primary-red: #D32F2F; --primary-green: #2E7D32; --primary-yellow: #F9A825;
+            --primary-black: #1A1A1A; --bg-light: #FAFAFA; --bg-white: #FFFFFF;
+            --text-dark: #212121; --text-medium: #616161; --border-color: #E0E0E0;
+            --shadow-lg: 0 8px 32px rgba(0, 0, 0, 0.16);
+            --font-display: 'Playfair Display', serif; --font-body: 'DM Sans', sans-serif;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: var(--font-body); background: linear-gradient(135deg, var(--primary-red), var(--primary-yellow), var(--primary-green));
+            min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 20px;
+        }
+
+        .auth-container {
+            background: white; max-width: 500px; width: 100%; padding: 48px; border-radius: 24px;
+            box-shadow: var(--shadow-lg); animation: fadeInUp 0.6s ease-out;
+        }
+        @keyframes fadeInUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
+
+        .logo { text-align: center; margin-bottom: 32px; }
+        .logo h1 {
+            font-family: var(--font-display); font-size: 48px; font-weight: 900;
+            background: linear-gradient(135deg, var(--primary-red), var(--primary-yellow));
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+            letter-spacing: -2px; margin-bottom: 8px;
+        }
+        .logo p { color: var(--text-medium); font-size: 15px; }
+
+        h2 { font-family: var(--font-display); font-size: 32px; margin-bottom: 12px; color: var(--text-dark); }
+        .subtitle { color: var(--text-medium); margin-bottom: 32px; font-size: 15px; }
+
+        .form-group { margin-bottom: 24px; }
+        .form-group label { display: block; margin-bottom: 8px; font-weight: 700; color: var(--text-dark); font-size: 14px; }
+        .form-group input {
+            width: 100%; padding: 16px; border: 2px solid var(--border-color); border-radius: 12px;
+            font-family: var(--font-body); font-size: 15px; transition: all 0.3s ease;
+        }
+        .form-group input:focus {
+            outline: none; border-color: var(--primary-red); box-shadow: 0 0 0 4px rgba(211, 47, 47, 0.1);
+        }
+
+        .btn-submit {
+            width: 100%; padding: 16px; background: linear-gradient(135deg, var(--primary-red), #E53935);
+            color: white; border: none; border-radius: 12px; font-family: var(--font-body);
+            font-weight: 800; font-size: 16px; cursor: pointer; transition: all 0.3s ease;
+            box-shadow: 0 4px 12px rgba(211, 47, 47, 0.3);
+        }
+        .btn-submit:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(211, 47, 47, 0.4); }
+
+        .auth-switch { text-align: center; margin-top: 24px; color: var(--text-medium); font-size: 14px; }
+        .auth-switch a { color: var(--primary-red); text-decoration: none; font-weight: 700; }
+        .auth-switch a:hover { text-decoration: underline; }
+
+        .toast {
+            position: fixed; bottom: 30px; right: 30px; background: var(--primary-black); color: white;
+            padding: 18px 28px; border-radius: 12px; box-shadow: var(--shadow-lg);
+            animation: slideInRight 0.3s ease; z-index: 10000; font-weight: 600;
+        }
+        @keyframes slideInRight { from { transform: translateX(100%); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
+        .toast.success { background: var(--primary-green); }
+        .toast.error { background: var(--primary-red); }
+
+        @media (max-width: 768px) {
+            .auth-container { padding: 32px 24px; }
+            .logo h1 { font-size: 36px; }
+            h2 { font-size: 28px; }
+        }
+    </style>
+</head>
+<body>
+    <div class="auth-container">
+        <div class="logo">
+            <h1>Luvano</h1>
+            <p>Marketplace de Moçambique</p>
+        </div>
+
+        <h2>Criar Conta</h2>
+        <p class="subtitle">Junte-se à comunidade Luvano</p>
+
+        <form id="registerForm" onsubmit="handleRegister(event)">
+            <div class="form-group">
+                <label>Nome Completo</label>
+                <input type="text" id="name" required placeholder="Ex: João Silva">
+            </div>
+
+            <div class="form-group">
+                <label>Email</label>
+                <input type="email" id="email" required placeholder="seu@email.com">
+            </div>
+
+            <div class="form-group">
+                <label>Telefone / WhatsApp</label>
+                <input type="tel" id="phone" required placeholder="+258 84 123 4567">
+            </div>
+
+            <div class="form-group">
+                <label>Senha</label>
+                <input type="password" id="password" required minlength="6" placeholder="Mínimo 6 caracteres">
+            </div>
+
+            <div class="form-group">
+                <label>Confirmar Senha</label>
+                <input type="password" id="confirmPassword" required minlength="6" placeholder="Digite a senha novamente">
+            </div>
+
+            <button type="submit" class="btn-submit">Criar Conta</button>
+        </form>
+
+        <p class="auth-switch">
+            Já tem conta? <a href="login.html">Entrar</a>
+        </p>
+    </div>
+
+    <script>
+        function handleRegister(event) {
+            event.preventDefault();
+
+            const name = document.getElementById('name').value;
+            const email = document.getElementById('email').value;
+            const phone = document.getElementById('phone').value;
+            const password = document.getElementById('password').value;
+            const confirmPassword = document.getElementById('confirmPassword').value;
+
+            // Validar senhas
+            if (password !== confirmPassword) {
+                showToast('As senhas não coincidem!', 'error');
+                return;
+            }
+
+            // Verificar se email já existe
+            const users = JSON.parse(localStorage.getItem('luvanoUsers') || '[]');
+            if (users.find(u => u.email === email)) {
+                showToast('Este email já está registrado!', 'error');
+                return;
+            }
+
+            // Criar usuário
+            const user = {
+                id: Date.now().toString(36) + Math.random().toString(36).substr(2),
+                name: name,
+                email: email,
+                phone: phone,
+                password: password, // Em produção, use hash!
+                created_at: new Date().toISOString()
+            };
+
+            // Salvar
+            users.push(user);
+            localStorage.setItem('luvanoUsers', JSON.stringify(users));
+
+            // Fazer login automático
+            const userSession = {
+                id: user.id,
+                name: user.name,
+                email: user.email,
+                phone: user.phone
+            };
+            localStorage.setItem('luvanoUser', JSON.stringify(userSession));
+
+            showToast('Conta criada com sucesso!', 'success');
+            
+            setTimeout(() => {
+                window.location.href = 'painel.html';
+            }, 1500);
+        }
+
+        function showToast(message, type = 'success') {
+            const toast = document.createElement('div');
+            toast.className = `toast ${type}`;
+            toast.textContent = message;
+            document.body.appendChild(toast);
+            
+            setTimeout(() => {
+                toast.style.animation = 'slideInRight 0.3s ease reverse';
+                setTimeout(() => toast.remove(), 300);
+            }, 3000);
+        }
+    </script>
+</body>
+</html>

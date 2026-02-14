@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Entrar - Luvano</title>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --primary-red: #D32F2F; --primary-green: #2E7D32; --primary-yellow: #F9A825;
+            --primary-black: #1A1A1A; --bg-white: #FFFFFF;
+            --text-dark: #212121; --text-medium: #616161; --border-color: #E0E0E0;
+            --shadow-lg: 0 8px 32px rgba(0, 0, 0, 0.16);
+            --font-display: 'Playfair Display', serif; --font-body: 'DM Sans', sans-serif;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: var(--font-body); 
+            background: linear-gradient(135deg, var(--primary-green), var(--primary-yellow), var(--primary-red));
+            min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 20px;
+        }
+
+        .auth-container {
+            background: white; max-width: 450px; width: 100%; padding: 48px; border-radius: 24px;
+            box-shadow: var(--shadow-lg); animation: fadeInUp 0.6s ease-out;
+        }
+        @keyframes fadeInUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
+
+        .logo { text-align: center; margin-bottom: 32px; }
+        .logo h1 {
+            font-family: var(--font-display); font-size: 48px; font-weight: 900;
+            background: linear-gradient(135deg, var(--primary-red), var(--primary-yellow));
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+            letter-spacing: -2px; margin-bottom: 8px;
+        }
+        .logo p { color: var(--text-medium); font-size: 15px; }
+
+        h2 { font-family: var(--font-display); font-size: 32px; margin-bottom: 12px; color: var(--text-dark); }
+        .subtitle { color: var(--text-medium); margin-bottom: 32px; font-size: 15px; }
+
+        .form-group { margin-bottom: 24px; }
+        .form-group label { display: block; margin-bottom: 8px; font-weight: 700; color: var(--text-dark); font-size: 14px; }
+        .form-group input {
+            width: 100%; padding: 16px; border: 2px solid var(--border-color); border-radius: 12px;
+            font-family: var(--font-body); font-size: 15px; transition: all 0.3s ease;
+        }
+        .form-group input:focus {
+            outline: none; border-color: var(--primary-green); box-shadow: 0 0 0 4px rgba(46, 125, 50, 0.1);
+        }
+
+        .btn-submit {
+            width: 100%; padding: 16px; background: linear-gradient(135deg, var(--primary-green), #388E3C);
+            color: white; border: none; border-radius: 12px; font-family: var(--font-body);
+            font-weight: 800; font-size: 16px; cursor: pointer; transition: all 0.3s ease;
+            box-shadow: 0 4px 12px rgba(46, 125, 50, 0.3);
+        }
+        .btn-submit:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(46, 125, 50, 0.4); }
+
+        .auth-switch { text-align: center; margin-top: 24px; color: var(--text-medium); font-size: 14px; }
+        .auth-switch a { color: var(--primary-green); text-decoration: none; font-weight: 700; }
+        .auth-switch a:hover { text-decoration: underline; }
+
+        .demo-info {
+            background: #FFF3CD; border: 2px solid #FFE082; border-radius: 12px; padding: 16px;
+            margin-top: 24px; font-size: 13px; color: #856404;
+        }
+        .demo-info strong { display: block; margin-bottom: 8px; }
+
+        .toast {
+            position: fixed; bottom: 30px; right: 30px; background: var(--primary-black); color: white;
+            padding: 18px 28px; border-radius: 12px; box-shadow: var(--shadow-lg);
+            animation: slideInRight 0.3s ease; z-index: 10000; font-weight: 600;
+        }
+        @keyframes slideInRight { from { transform: translateX(100%); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
+        .toast.success { background: var(--primary-green); }
+        .toast.error { background: var(--primary-red); }
+
+        @media (max-width: 768px) {
+            .auth-container { padding: 32px 24px; }
+            .logo h1 { font-size: 36px; }
+            h2 { font-size: 28px; }
+        }
+    </style>
+</head>
+<body>
+    <div class="auth-container">
+        <div class="logo">
+            <h1>Luvano</h1>
+            <p>Marketplace de Moçambique</p>
+        </div>
+
+        <h2>Bem-vindo de Volta</h2>
+        <p class="subtitle">Entre na sua conta</p>
+
+        <form id="loginForm" onsubmit="handleLogin(event)">
+            <div class="form-group">
+                <label>Email</label>
+                <input type="email" id="email" required placeholder="seu@email.com">
+            </div>
+
+            <div class="form-group">
+                <label>Senha</label>
+                <input type="password" id="password" required placeholder="Sua senha">
+            </div>
+
+            <button type="submit" class="btn-submit">Entrar</button>
+        </form>
+
+        <p class="auth-switch">
+            Não tem conta? <a href="cadastro.html">Criar conta</a>
+        </p>
+
+        <div class="demo-info">
+            <strong>💡 Modo Demonstração</strong>
+            Use qualquer email/senha para testar. O primeiro acesso cria a conta automaticamente!
+        </div>
+    </div>
+
+    <script>
+        function handleLogin(event) {
+            event.preventDefault();
+
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+
+            // Buscar usuários
+            const users = JSON.parse(localStorage.getItem('luvanoUsers') || '[]');
+            const user = users.find(u => u.email === email);
+
+            if (user) {
+                // Verificar senha
+                if (user.password !== password) {
+                    showToast('Senha incorreta!', 'error');
+                    return;
+                }
+
+                // Login bem-sucedido
+                const userSession = {
+                    id: user.id,
+                    name: user.name,
+                    email: user.email,
+                    phone: user.phone
+                };
+                localStorage.setItem('luvanoUser', JSON.stringify(userSession));
+
+                showToast('Login realizado com sucesso!', 'success');
+                
+                setTimeout(() => {
+                    window.location.href = 'painel.html';
+                }, 1500);
+            } else {
+                // MODO DEMONSTRAÇÃO: criar conta automaticamente
+                const newUser = {
+                    id: Date.now().toString(36) + Math.random().toString(36).substr(2),
+                    name: 'Usuário Demo',
+                    email: email,
+                    phone: '+258 84 000 0000',
+                    password: password,
+                    created_at: new Date().toISOString()
+                };
+
+                users.push(newUser);
+                localStorage.setItem('luvanoUsers', JSON.stringify(users));
+
+                const userSession = {
+                    id: newUser.id,
+                    name: newUser.name,
+                    email: newUser.email,
+                    phone: newUser.phone
+                };
+                localStorage.setItem('luvanoUser', JSON.stringify(userSession));
+
+                showToast('Conta criada e login realizado!', 'success');
+                
+                setTimeout(() => {
+                    window.location.href = 'painel.html';
+                }, 1500);
+            }
+        }
+
+        function showToast(message, type = 'success') {
+            const toast = document.createElement('div');
+            toast.className = `toast ${type}`;
+            toast.textContent = message;
+            document.body.appendChild(toast);
+            
+            setTimeout(() => {
+                toast.style.animation = 'slideInRight 0.3s ease reverse';
+                setTimeout(() => toast.remove(), 300);
+            }, 3000);
+        }
+
+        // Verificar se já está logado
+        if (localStorage.getItem('luvanoUser')) {
+            window.location.href = 'painel.html';
+        }
+    </script>
+</body>
+</html>
